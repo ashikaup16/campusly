@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Clubs — Campusly{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="page-intro"><div><div class="eyebrow">YOUR PEOPLE ARE OUT THERE</div><h1>Find your <span class="gradient-text">kind of club.</span></h1><p>Explore clubs, see their events, and apply to join.</p></div>{% if user.role == 'admin' or user.is_superuser %}<a class="button button-primary" href="{% url 'club_create' %}">＋ Create a club</a>{% endif %}</div>
+  <form class="filter-bar club-filter" method="get" action="{% url 'club_list' %}"><label class="search-field"><span>⌕</span><input type="search" name="q" value="{{ query }}" placeholder="Find your people..." aria-label="Search clubs"></label><button class="button button-primary" type="submit">Find a club <span>↗</span></button></form>
+  {% if clubs %}<div class="club-grid">{% for club in clubs %}<article class="club-card reveal"><div class="club-card-top"><span class="club-big-emoji">{{ club.emoji }}</span><span class="club-tag">{{ club.category }}</span></div><h2>{{ club.name }}</h2><p>{{ club.description|truncatechars:160 }}</p><div class="club-card-footer"><span>🫶 {{ club.member_count }} member{{ club.member_count|pluralize }}</span><a class="button button-primary button-small" href="{% url 'club_detail' club.pk %}">View club ↗</a></div></article>{% endfor %}</div>
+  {% else %}<div class="empty-state"><span>🪩</span><h3>Your people are waiting to meet you.</h3><p>No clubs match that search yet. Try another search, or be the one who starts a new crew.</p>{% if user.is_superuser or user.role == 'admin' %}<a class="button button-primary" href="{% url 'club_create' %}">Start a club ↗</a>{% endif %}</div>{% endif %}
+</section>
+{% endblock %}

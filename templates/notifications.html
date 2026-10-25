@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Notifications — Campusly{% endblock %}
+{% block content %}
+<section class="page-shell notification-page"><div class="page-intro"><div><div class="eyebrow">YOU’RE IN THE LOOP</div><h1>Little <span class="gradient-text">moments.</span></h1><p>The latest from your campus community.</p></div></div>
+<div class="notification-list">{% for item in notifications %}<a class="notification-item {% if not item.read %}notification-unread{% endif %}" href="{{ item.url|default:'#' }}"><span class="notification-icon">{% if 'event' in item.message|lower %}🎉{% else %}💜{% endif %}</span><span class="notification-text"><strong>{{ item.message }}</strong><small>{{ item.created_at|timesince }} ago</small></span><span class="notification-arrow">↗</span></a>{% empty %}<div class="empty-state"><span>🪷</span><h3>All caught up.</h3><p>When something happens, you’ll hear it here first.</p><a class="button button-outline" href="{% url 'event_list' %}">Explore events ↗</a></div>{% endfor %}</div></section>
+{% endblock %}

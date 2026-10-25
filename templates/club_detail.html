@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ club.name }} — Campusly{% endblock %}
+{% block content %}
+<section class="detail-shell club-detail-shell">
+  <a class="back-link" href="{% url 'club_list' %}">← All clubs</a>
+  <div class="club-profile">
+    <div class="club-profile-emoji">{{ club.emoji }}</div>
+    <div class="club-profile-copy"><span class="club-tag">{{ club.category }}</span><h1>{{ club.name }}</h1><p>{{ club.description }}</p><span class="club-member-count">🫶 {{ club.members.count }} club member{{ club.members.count|pluralize }}</span></div>
+    {% if can_administer %}<a class="button button-outline" href="{% url 'club_edit' club.pk %}">Manage club ⚙</a>{% endif %}
+  </div>
+  {% if can_manage %}<div class="club-manager-actions"><a class="button button-primary" href="{% url 'event_create' club.pk %}">＋ Create club event</a><a class="button button-outline" href="{% url 'applications' club.pk %}">Review applications <span>↗</span></a></div>{% endif %}
+  <div class="section-heading club-events-title"><div><div class="eyebrow">WHAT’S HAPPENING HERE</div><h2>Club <span class="gradient-text">events.</span></h2></div></div>
+  {% if events %}<div class="event-grid">{% for event in events %}{% include "partials/event_card.html" %}{% endfor %}</div>{% else %}<div class="empty-state"><span>🎟️</span><h3>No events posted yet.</h3><p>New events from this club will appear here.</p></div>{% endif %}
+  {% if user.is_authenticated and user.role == 'student' %}
+    <section class="club-join-panel">
+      {% if is_member %}<span class="club-big-emoji">🎉</span><div><h2>You’re part of {{ club.name }}.</h2><p>Explore published events and check back for club updates.</p></div>
+      {% elif application and application.status == 'pending' %}<span class="club-big-emoji">⏳</span><div><h2>Your application is in.</h2><p>The club team will review your application or audition and notify you of their decision.</p></div>
+      {% elif application and application.status == 'rejected' %}<span class="club-big-emoji">💌</span><div><h2>Want to apply again?</h2><p>You can update your application and submit it for another review.</p></div><a class="button button-primary" href="{% url 'apply_to_club' club.pk %}">Update application ↗</a>
+      {% else %}<span class="club-big-emoji">🫶</span><div><h2>Interested in joining?</h2><p>Apply to become a member or share your audition details with the club.</p></div><a class="button button-primary" href="{% url 'apply_to_club' club.pk %}">Apply / audition ↗</a>{% endif %}
+    </section>
+  {% elif not user.is_authenticated %}<section class="club-join-panel"><span class="club-big-emoji">💌</span><div><h2>Find your place in {{ club.name }}.</h2><p>Create a student account to apply, audition, and register for any published event.</p></div><a class="button button-primary" href="{% url 'signup' %}">Create student account ↗</a></section>{% endif %}
+</section>
+{% endblock %}

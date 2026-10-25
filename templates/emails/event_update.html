@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <body style="margin:0;padding:0;background-color:#f5eadf;color:#3d241a;font-family:Arial,Helvetica,sans-serif;">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;">{{ intro }} {{ event.title }}</div>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f5eadf;padding:32px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background-color:#fffaf5;border:1px solid #ead8c7;border-radius:18px;overflow:hidden;">
+            <tr>
+              <td style="padding:24px 32px;background-color:#7f3025;color:#fffaf5;">
+                <div style="font-size:13px;font-weight:bold;letter-spacing:2px;">✳ CAMPUSLY</div>
+                <div style="margin-top:8px;color:#f6d6c9;font-size:12px;">{{ subject_label }}</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px;">
+                {% if poster_url %}<img src="{{ poster_url }}" alt="{{ event.title }} poster" width="536" style="display:block;width:100%;max-width:536px;height:auto;margin:0 0 24px;border-radius:12px;">{% endif %}
+                <h1 style="margin:0 0 12px;color:#3d241a;font-size:28px;line-height:1.2;">{{ heading }}</h1>
+                <p style="margin:0 0 24px;color:#705345;font-size:15px;line-height:1.6;">{{ intro }}</p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:24px;background-color:#f5eadf;border-radius:12px;">
+                  <tr><td style="padding:20px;">
+                    <div style="margin-bottom:6px;color:#9b392d;font-size:11px;font-weight:bold;letter-spacing:1.5px;">{{ event.club.name|upper }}</div>
+                    <div style="margin-bottom:16px;color:#3d241a;font-size:22px;font-weight:bold;">{{ event.title }}</div>
+                    <div style="margin-bottom:10px;color:#705345;font-size:14px;"><strong style="color:#3d241a;">When</strong>&nbsp; {{ starts_at|date:"l, F j, Y" }} · {{ starts_at|date:"g:i A" }}{% if ends_at %}–{{ ends_at|date:"g:i A" }}{% endif %}</div>
+                    <div style="color:#705345;font-size:14px;"><strong style="color:#3d241a;">Where</strong>&nbsp; {{ event.venue }}</div>
+                    {% if event.description %}<div style="margin-top:16px;color:#705345;font-size:14px;line-height:1.6;">{{ event.description|linebreaksbr }}</div>{% endif %}
+                  </td></tr>
+                </table>
+                <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto 22px;">
+                  <tr>
+                    <td align="center" style="border-radius:9px;background-color:#b6332b;">
+                      <a href="{{ event_url }}" style="display:inline-block;padding:14px 24px;color:#ffffff;font-size:14px;font-weight:bold;text-decoration:none;">{{ button_label }} &nbsp;→</a>
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin:0;color:#876d5f;font-size:12px;line-height:1.6;">If the button doesn’t work, copy this link into your browser:<br><a href="{{ event_url }}" style="color:#9e3027;word-break:break-all;">{{ event_url }}</a></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 32px;border-top:1px solid #ead8c7;color:#876d5f;font-size:12px;text-align:center;">Clubs, events, auditions. Your campus, your people. ❤️</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

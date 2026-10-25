@@ -1,0 +1,62 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5eadf">
+  <title>{% block title %}Campusly — find your people{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'portal/styles.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">✳</span><span>campusly<span class="brand-dot">.</span></span></a>
+    <button class="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="main-nav" aria-label="Main navigation">
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{% url 'club_list' %}" class="{% if request.resolver_match.url_name == 'club_list' %}active{% endif %}">Clubs</a>
+        {% if user.role == 'student' %}
+          <a href="{% url 'event_list' %}" class="{% if request.resolver_match.url_name == 'event_list' %}active{% endif %}">Events</a>
+        {% endif %}
+        {% if user.role != 'student' or user.is_superuser %}
+          <a href="{% url 'reports' %}">Reports</a>
+        {% endif %}
+        {% if user.role == 'admin' or user.is_superuser %}
+          <a href="{% url 'people' %}">People</a>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'club_list' %}">Clubs</a>
+      {% endif %}
+    </nav>
+    <div class="topbar-actions">
+      {% if user.is_authenticated %}
+        <a class="notification-link" href="{% url 'notifications' %}" aria-label="Notifications">♧{% if unread_notification_count %}<span class="notification-badge">{{ unread_notification_count }}</span>{% endif %}</a>
+        <span class="user-chip"><span class="avatar">{{ user.first_name|default:user.username|first|upper }}</span><span class="user-chip-name">{{ user.first_name|default:user.username }}<small>{{ user.display_role }}</small></span></span>
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="button button-quiet button-small" type="submit">Log out</button></form>
+      {% else %}
+        <a class="button button-quiet button-small" href="{% url 'login' %}">Log in</a>
+        <a class="button button-primary button-small" href="{% url 'signup' %}">Join the campus <span>↗</span></a>
+      {% endif %}
+    </div>
+  </header>
+  {% if messages %}
+    <div class="toast-stack" aria-live="polite">
+      {% for message in messages %}<div class="toast toast-{{ message.tags }}"><span>{{ message }}</span><button type="button" class="toast-close" aria-label="Dismiss message">×</button></div>{% endfor %}
+    </div>
+  {% endif %}
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="site-footer">
+    <a class="brand brand-footer" href="{% url 'home' %}"><span class="brand-mark">✳</span><span>campusly<span class="brand-dot">.</span></span></a>
+    <p>Clubs, events, auditions. Your campus, your people. <span>❤️</span></p>
+    <span class="footer-year">Made for your campus community.</span>
+  </footer>
+  <script src="{% static 'portal/app.js' %}" defer></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

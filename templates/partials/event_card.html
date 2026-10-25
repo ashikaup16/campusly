@@ -1,0 +1,9 @@
+<article class="event-card reveal">
+  <a class="event-card-image" href="{% url 'event_detail' event.pk %}">
+    {% if event.poster %}<img src="{{ event.poster.url }}" alt="{{ event.title }}" loading="lazy">
+    {% else %}<span class="poster-placeholder" aria-hidden="true">🎉</span>{% endif %}
+    <span class="event-category">{{ event.get_category_display }}</span>
+    <span class="image-date"><strong>{{ event.starts_at|date:"d" }}</strong><small>{{ event.starts_at|date:"M" }}</small></span>
+  </a>
+  <div class="event-card-content"><div class="event-card-meta"><span>📍 {{ event.venue }}</span><span>· {{ event.club.name }}</span></div><h3><a href="{% url 'event_detail' event.pk %}">{{ event.title }}</a></h3><p>{{ event.description|truncatechars:92 }}</p><div class="event-card-footer"><span class="spots-pill">{% if event.seats_left == 0 %}FULL{% else %}{{ event.seats_left }} SPOTS LEFT{% endif %}</span><a class="card-arrow" href="{% url 'event_detail' event.pk %}" aria-label="Explore {{ event.title }}">↗</a></div></div>
+</article>

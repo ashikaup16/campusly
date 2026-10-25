@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Applications — {{ club.name }}{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <a class="back-link" href="{% url 'club_detail' club.pk %}">← {{ club.name }}</a>
+  <div class="page-intro"><div><div class="eyebrow">FIND YOUR NEXT MEMBER</div><h1>Club <span class="gradient-text">applications.</span></h1><p>{{ club.name }} · Review applications and auditions.</p></div></div>
+  <div class="application-list">{% for application in applications %}<article class="application-card"><div class="application-header"><span class="avatar">{{ application.student.username|first|upper }}</span><div><h2>{{ application.student.get_full_name|default:application.student.username }}</h2><p>{{ application.student.email }}{% if application.student.department %} · {{ application.student.department }}{% endif %}</p></div><span class="application-status status-{{ application.status }}">{{ application.get_status_display }}</span></div><div class="application-note">{{ application.note|default:"No application note or audition details were provided."|linebreaksbr }}</div><div class="application-footer"><span>Applied {{ application.submitted_at|date:"M j, Y · g:i A" }}</span>{% if application.status == 'pending' %}<div class="application-actions"><form method="post" action="{% url 'review_application' application.pk 'reject' %}">{% csrf_token %}<button class="button button-outline button-small" type="submit">Decline</button></form><form method="post" action="{% url 'review_application' application.pk 'approve' %}">{% csrf_token %}<button class="button button-primary button-small" type="submit">Accept member ✓</button></form></div>{% endif %}</div></article>{% empty %}<div class="empty-state"><span>💌</span><h3>No applications yet.</h3><p>Student applications and auditions will appear here.</p></div>{% endfor %}</div>
+</section>
+{% endblock %}

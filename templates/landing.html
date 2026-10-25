@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Campusly — find your people{% endblock %}
+{% block content %}
+<section class="hero landing-hero">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="live-dot"></span> MADE FOR YOUR CAMPUS COMMUNITY</div>
+    <h1>Your club.<br>Your people. <span class="gradient-text">Your moment.</span></h1>
+    <p class="hero-lede">One place to run clubs, bring coordinators together, welcome new members, host auditions, and keep every student in the loop.</p>
+    <div class="hero-buttons"><a class="button button-primary button-large" href="{% url 'signup' %}">Get started <span>↗</span></a><a class="button button-outline button-large" href="{% url 'login' %}">Sign in <span>↗</span></a></div>
+    <div class="social-proof"><div class="avatar-stack"><span>🧑🏽‍🎤</span><span>👩🏻‍💻</span><span>🧑🏾‍🎨</span><span>👩🏼‍🎓</span></div><span><strong>Join a club. Apply. Show up.</strong><br>Everything starts with your community ✨</span></div>
+  </div>
+  <div class="hero-art">
+    <div class="hero-image-wrap"><img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1000&q=85" alt="Students celebrating together at a campus event"><div class="image-shade"></div><div class="hero-image-caption"><span class="caption-icon">🎶</span><span><strong>Campus, but louder.</strong><small>Find your next favorite memory</small></span><span class="caption-arrow">↗</span></div></div>
+    <span class="float-sticker sticker-sparkle">✦</span><span class="float-sticker sticker-heart">💜</span><span class="float-sticker sticker-star">✳</span><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+  </div>
+</section>
+<section class="ticker" aria-label="Campus life"><div class="ticker-track"><span>CLUBS <b>✳</b> COORDINATORS <b>✳</b> AUDITIONS <b>✳</b> EVENTS <b>✳</b> STUDENTS <b>✳</b> CLUBS <b>✳</b> COORDINATORS <b>✳</b> AUDITIONS <b>✳</b> EVENTS <b>✳</b> STUDENTS <b>✳</b></span></div></section>
+<section class="section dashboard-entry-section" id="dashboards">
+  <div class="section-heading"><div><div class="eyebrow">CHOOSE YOUR SPACE</div><h2>Three roles. <span class="gradient-text">One campus.</span></h2><p class="dashboard-entry-lede">Sign in to your dashboard or create the right account to get started.</p></div></div>
+  <div class="dashboard-entry-grid">
+    <article class="dashboard-entry-card dashboard-entry-admin"><div class="entry-card-top"><span class="entry-card-icon">🛡️</span><span class="club-tag">CAMPUS-WIDE ACCESS</span></div><div class="eyebrow">01 · ADMIN</div><h3>Admin dashboard</h3><p>Manage clubs, events, accounts, coordinators, and campus-wide activity.</p><div class="entry-card-actions"><a class="button button-outline button-small" href="{% url 'login' %}">Admin log in</a>{% if not administrator_exists %}<a class="button button-primary button-small" href="{% url 'signup' %}">Create admin account ↗</a>{% elif user.is_authenticated and user.role == 'admin' or user.is_superuser %}<a class="button button-primary button-small" href="{% url 'club_create' %}">Create a club ↗</a>{% else %}<span class="entry-card-note">Admin account setup is already complete.</span>{% endif %}</div></article>
+    <article class="dashboard-entry-card dashboard-entry-coordinator"><div class="entry-card-top"><span class="entry-card-icon">🎨</span><span class="club-tag">ASSIGNED CLUBS</span></div><div class="eyebrow">02 · COORDINATOR</div><h3>Coordinator dashboard</h3><p>Create, update, and manage events, posters, student auditions, and registrations for your clubs.</p><div class="entry-card-actions"><a class="button button-primary button-small" href="{% url 'login' %}">Coordinator log in ↗</a><span class="entry-card-note">Coordinator accounts and club assignments are managed by the campus admin.</span></div></article>
+    <article class="dashboard-entry-card dashboard-entry-student"><div class="entry-card-top"><span class="entry-card-icon">💌</span><span class="club-tag">CLUB MEMBERSHIP</span></div><div class="eyebrow">03 · STUDENT</div><h3>Student dashboard</h3><p>Apply or audition for clubs, register for any published event, and receive updates by email.</p><div class="entry-card-actions"><a class="button button-outline button-small" href="{% url 'login' %}">Student log in</a><a class="button button-primary button-small" href="{% url 'signup' %}">Create student account ↗</a></div></article>
+  </div>
+</section>
+<section class="section section-pad">
+  <div class="section-heading"><div><div class="eyebrow">BUILT AROUND YOUR CLUBS</div><h2>One club. <span class="gradient-text">Every moving part.</span></h2></div><a class="text-link" href="{% url 'club_list' %}">Explore clubs <span>↗</span></a></div>
+  <div class="club-grid"><article class="club-card"><div class="club-card-top"><span class="club-big-emoji">🛡️</span><span class="club-tag">CLUB ADMIN</span></div><h2>Oversee your club</h2><p>Manage your club’s details, team, members, auditions, and everything happening under its name.</p></article><article class="club-card"><div class="club-card-top"><span class="club-big-emoji">🎨</span><span class="club-tag">COORDINATOR</span></div><h2>Make events happen</h2><p>Publish event details and posters, update plans, review applications, and keep your club’s students informed.</p></article><article class="club-card"><div class="club-card-top"><span class="club-big-emoji">💌</span><span class="club-tag">STUDENT</span></div><h2>Find your place</h2><p>Browse clubs, share an application or audition, become a member, and register for your club’s events.</p></article></div>
+</section>
+<section class="join-banner"><div class="join-emoji">🎪</div><div><div class="eyebrow">A FRESH START FOR YOUR CAMPUS</div><h2>Start with your own people.</h2><p>Create the first account, set up clubs and teams, then invite your campus community to join.</p></div><a class="button button-dark button-large" href="{% url 'signup' %}">Get started <span>↗</span></a></section>
+{% endblock %}

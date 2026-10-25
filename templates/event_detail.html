@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} — Campusly{% endblock %}
+{% block content %}
+<section class="detail-shell">
+  <a class="back-link" href="{% url 'club_detail' event.club.pk %}">← {{ event.club.name }}</a>
+  <div class="detail-hero">
+    {% if event.poster %}<img src="{{ event.poster.url }}" alt="{{ event.title }} poster">{% else %}<div class="poster-placeholder detail-poster" aria-hidden="true">🎉</div>{% endif %}
+    <div class="detail-hero-overlay"></div><span class="detail-category">{{ event.get_category_display }} ✳</span><h1>{{ event.title }}</h1>
+  </div>
+  <div class="detail-content">
+    <article class="detail-description"><div class="eyebrow">{{ event.club.name|upper }} · CLUB EVENT</div><h2>Club events bring <span class="gradient-text">people together.</span></h2><p>{{ event.description|linebreaksbr }}</p><div class="organizer-line"><span class="avatar">{{ event.organizer.first_name|default:event.organizer.username|first|upper }}</span><span>Coordinated by <strong>{{ event.organizer.get_full_name|default:event.organizer.username }}</strong><small><a href="{% url 'club_detail' event.club.pk %}">View {{ event.club.name }} {{ event.club.emoji }} ↗</a></small></span></div>
+    {% if can_manage %}<div class="event-manager-links"><a class="button button-outline button-small" href="{% url 'event_edit' event.pk %}">Edit event</a><a class="button button-outline button-small" href="{% url 'attendees' event.pk %}">Attendees</a><form method="post" action="{% url 'event_delete' event.pk %}" data-confirm="Delete {{ event.title }} and its registrations?">{% csrf_token %}<button class="button button-danger button-small" type="submit">Delete event</button></form></div>{% endif %}</article>
+    <aside class="booking-card"><div class="eyebrow">SAVE YOUR SPOT</div><h3>Your next story awaits. <span>✨</span></h3><div class="detail-fact"><span>📅</span><span><strong>{{ event.starts_at|date:"l, F j" }}</strong><small>{{ event.starts_at|date:"g:i A" }} – {{ event.ends_at|date:"g:i A" }}</small></span></div><div class="detail-fact"><span>📍</span><span><strong>{{ event.venue }}</strong><small>Find your way there</small></span></div><div class="seat-meter"><div><span>Spots filling up</span><strong>{{ event.seats_left }} / {{ event.capacity }} left</strong></div><div class="meter-track"><span style="width:{{ event.fill_percentage }}%"></span></div></div>
+      {% if user.is_authenticated and user.role == 'student' %}
+        {% if registration and registration.status == 'registered' %}<div class="registered-note">Your event spot is registered. 🎉</div><form method="post" action="{% url 'cancel_registration' event.pk %}" data-confirm="Cancel your event registration?">{% csrf_token %}<button class="button button-outline button-full" type="submit">Cancel registration</button></form>
+        {% elif event.is_upcoming and event.seats_left > 0 %}<form method="post" action="{% url 'register_event' event.pk %}">{% csrf_token %}<button class="button button-primary button-full button-large" type="submit">I’m coming <span>↗</span></button></form>
+        {% else %}<button class="button button-disabled button-full" type="button" disabled>{% if event.seats_left == 0 %}All filled up{% else %}This one’s in the books{% endif %}</button>{% endif %}
+      {% elif user.is_authenticated %}{% if user.role != 'student' or user.is_superuser %}<a class="button button-primary button-full" href="{% url 'attendees' event.pk %}">See guest list ↗</a>{% endif %}
+      {% else %}<a class="button button-primary button-full button-large" href="{% url 'login' %}?next={{ request.path }}">Log in to grab a spot <span>↗</span></a>{% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

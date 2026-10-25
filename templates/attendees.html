@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Guest list — {{ event.title }}{% endblock %}
+{% block content %}
+<section class="page-shell"><a class="back-link" href="{% url 'event_detail' event.pk %}">← {{ event.title }}</a><div class="page-intro"><div><div class="eyebrow">THE PEOPLE MAKING IT HAPPEN</div><h1>Your <span class="gradient-text">guest list.</span></h1><p>{{ event.title }} · {{ registrations|length }} confirmed attendee{{ registrations|length|pluralize }}</p></div><a class="button button-outline" href="{% url 'reports' %}">View reports ↗</a></div>
+  <div class="table-wrap"><table class="data-table"><thead><tr><th>Attendee</th><th>Department</th><th>Email</th><th>Registered</th></tr></thead><tbody>{% for registration in registrations %}<tr><td><span class="table-person"><span class="avatar">{{ registration.student.first_name|default:registration.student.username|first|upper }}</span><strong>{{ registration.student.get_full_name|default:registration.student.username }}</strong></span></td><td>{{ registration.student.department|default:"—" }}</td><td><a href="mailto:{{ registration.student.email }}">{{ registration.student.email|default:"—" }}</a></td><td>{{ registration.registered_at|date:"M j, Y · g:i A" }}</td></tr>{% empty %}<tr><td colspan="4" class="table-empty">No one’s on the list yet. Tell the campus about your event! 📣</td></tr>{% endfor %}</tbody></table></div>
+</section>
+{% endblock %}

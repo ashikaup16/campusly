@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Events — Campusly{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="page-intro"><div><div class="eyebrow"><span class="live-dot"></span> EVENTS FROM YOUR CAMPUS CLUBS</div><h1>Find your <span class="gradient-text">next thing.</span></h1><p>Browse upcoming events and register as a student—club audition approval is not required.</p></div></div>
+  <form class="filter-bar" method="get" action="{% url 'event_list' %}">
+    <label class="search-field"><span>⌕</span><input type="search" name="q" value="{{ query }}" placeholder="Search events, places, clubs..." aria-label="Search events"></label>
+    <select name="category" aria-label="Filter by category"><option value="">Every vibe</option>{% for value,label in categories %}<option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+    <select name="time" aria-label="Filter by time"><option value="upcoming" {% if timeframe == 'upcoming' %}selected{% endif %}>Coming up</option><option value="past" {% if timeframe == 'past' %}selected{% endif %}>Past events</option><option value="all" {% if timeframe == 'all' %}selected{% endif %}>Any time</option></select>
+    <button class="button button-primary" type="submit">Find my vibe <span>↗</span></button>
+  </form>
+  {% if events %}<div class="event-grid event-grid-page">{% for event in events %}{% include "partials/event_card.html" %}{% endfor %}</div>{% else %}<div class="empty-state"><span>🦋</span><h3>Nothing on this wavelength just yet.</h3><p>Try another search, switch up your filters, or check back soon.</p><a class="button button-outline" href="{% url 'event_list' %}">Clear filters ↗</a></div>{% endif %}
+</section>
+{% endblock %}
