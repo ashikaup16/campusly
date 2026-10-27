@@ -134,3 +134,4 @@ python manage.py makemigrations --check --dry-run
 - `.env` contains local settings and credentials. It is ignored by Git; only `.env.example` is intended to be shared.
 - Uploaded event posters and generated static files are local runtime data and are excluded from Git.
 - This project uses Django's development server for local use. Configure production hosting, HTTPS, a secure `SECRET_KEY`, and restricted `ALLOWED_HOSTS` before deployment.
+- On Vercel, Django automatically allows the deployment host from `VERCEL_URL` and the production host from `VERCEL_PROJECT_PRODUCTION_URL`. If using a custom domain, add it to the comma-separated `ALLOWED_HOSTS` environment variable in the Vercel project settings.
