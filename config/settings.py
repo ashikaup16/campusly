@@ -10,7 +10,10 @@ except ImportError:  # python-dotenv not installed; fall back to real environmen
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-only-change-me-before-deployment")
-DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
+DEBUG = os.environ.get(
+    "DEBUG",
+    "False" if os.environ.get("VERCEL") or os.environ.get("VERCEL_URL") else "True",
+).lower() == "true"
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
@@ -61,7 +64,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
-if os.environ.get("DB_ENGINE", "").lower() == "mysql":
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+if DATABASE_URL:
+    import dj_database_url
+
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=not DEBUG,
+        )
+    }
+elif os.environ.get("DB_ENGINE", "").lower() == "mysql":
     import pymysql
 
     pymysql.install_as_MySQLdb()
@@ -76,6 +90,13 @@ if os.environ.get("DB_ENGINE", "").lower() == "mysql":
             "OPTIONS": {"charset": "utf8mb4"},
         }
     }
+elif os.environ.get("VERCEL") or os.environ.get("VERCEL_URL"):
+    from django.core.exceptions import ImproperlyConfigured
+
+    raise ImproperlyConfigured(
+        "Set DATABASE_URL to a persistent hosted database in Vercel project settings. "
+        "SQLite is not supported on Vercel."
+    )
 else:
     DATABASES = {
         "default": {

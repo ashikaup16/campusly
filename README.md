@@ -131,6 +131,8 @@ python manage.py makemigrations --check --dry-run
 ## Data and configuration safety
 
 - The local SQLite database is `db.sqlite3`; it is created and migrated on your computer and is not included in Git.
+- Vercel deployments require a persistent hosted database. Create a PostgreSQL database with a provider such as Neon or Supabase. Put its connection string in your ignored local `.env` as `DATABASE_URL` and run `python manage.py migrate` to create the tables. Add the same connection string as `DATABASE_URL` in the Vercel project's environment variables, set `DEBUG=False`, and redeploy.
+- `DEBUG` defaults to `False` on Vercel and `True` for local development. Set `DEBUG=False` explicitly in Vercel as well.
 - `.env` contains local settings and credentials. It is ignored by Git; only `.env.example` is intended to be shared.
 - Uploaded event posters and generated static files are local runtime data and are excluded from Git.
 - This project uses Django's development server for local use. Configure production hosting, HTTPS, a secure `SECRET_KEY`, and restricted `ALLOWED_HOSTS` before deployment.
