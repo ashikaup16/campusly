@@ -4,6 +4,8 @@
 
 Campusly is a club-first event management portal built with Django. It gives campus administrators, club coordinators, and students one colorful place to manage clubs, publish events, review auditions, register attendees, and stay up to date by email.
 
+**Live site:** [https://campusly-event.vercel.app/](https://campusly-event.vercel.app/)
+
 **Run Campusly locally:** [http://127.0.0.1:8765/](http://127.0.0.1:8765/)
 
 > This is a local development address. It opens on the computer running Django; it is not a public website link.
@@ -130,6 +132,8 @@ python manage.py makemigrations --check --dry-run
 
 ## Data and configuration safety
 
+- The live site is hosted on Vercel and uses a hosted PostgreSQL database on Neon. Create an account on the live site to get started; the production database is separate from local development data.
+- For production email links, set `SITE_BASE_URL=https://campusly-event.vercel.app` in Vercel's project environment variables. Configure SMTP variables separately if the site needs to deliver real email.
 - The local SQLite database is `db.sqlite3`; it is created and migrated on your computer and is not included in Git.
 - Vercel deployments require a persistent hosted database. Create a PostgreSQL database with a provider such as Neon or Supabase. Put its connection string in your ignored local `.env` as `DATABASE_URL` and run `python manage.py migrate` to create the tables. Add the same connection string as `DATABASE_URL` in the Vercel project's environment variables, set `DEBUG=False`, and redeploy.
 - `DEBUG` defaults to `False` on Vercel and `True` for local development. Set `DEBUG=False` explicitly in Vercel as well.
